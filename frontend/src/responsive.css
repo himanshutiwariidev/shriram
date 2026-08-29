@@ -1,0 +1,276 @@
+/*
+ * CRM Global Responsive Styles
+ * Desktop (> 900px) is intentionally untouched.
+ * All rules below are scoped to ≤ 900px (tablet + mobile).
+ */
+
+/* ─── Stop page-level horizontal scroll on mobile / tablet ──────────────── */
+@media (max-width: 900px) {
+  html, body {
+    overflow-x: hidden;
+    max-width: 100%;
+  }
+}
+
+/* ─── Sidebar: off-canvas drawer on mobile ───────────────────────────────── */
+@media (max-width: 900px) {
+  .crm-sidebar {
+    transform: translateX(-100%) !important;
+    transition: transform 0.26s cubic-bezier(0.4, 0, 0.2, 1) !important;
+    z-index: 300 !important;
+  }
+  .crm-sidebar.sidebar-open {
+    transform: translateX(0) !important;
+    box-shadow: 6px 0 40px rgba(0, 0, 0, 0.45) !important;
+  }
+}
+
+@keyframes crm-overlay-in {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+@media (max-width: 900px) {
+  .crm-overlay {
+    display: block !important;
+    position: fixed;
+    inset: 0;
+    background: rgba(8, 19, 47, 0.55);
+    z-index: 299;
+    animation: crm-overlay-in 0.2s ease both;
+  }
+}
+
+/* Desktop: always hide hamburger and overlay, never transform sidebar */
+@media (min-width: 901px) {
+  .crm-hamburger { display: none !important; }
+  .crm-overlay   { display: none !important; }
+  .crm-sidebar   { transform: none !important; transition: none !important; }
+}
+
+/* ─── Content wrapper ────────────────────────────────────────────────────── */
+@media (max-width: 900px) {
+  .crm-content {
+    margin-left: 0 !important;
+    overflow-x: hidden;
+    width: 100%;
+    max-width: 100vw;
+  }
+
+  /* ── Header ─────────────────────────────────────────────────────────────── */
+  .crm-header {
+    padding: 0 14px !important;
+    gap: 10px;
+  }
+  .crm-header-date  { display: none !important; }
+  .crm-header-title { font-size: 15px !important; }
+  .crm-status-badge { display: none !important; }
+
+  .crm-hamburger {
+    display: flex !important;
+    align-items: center;
+    justify-content: center;
+    width: 38px;
+    height: 38px;
+    border-radius: 10px;
+    border: none;
+    background: rgba(8, 19, 47, 0.07);
+    cursor: pointer;
+    flex-shrink: 0;
+    transition: background 0.15s;
+  }
+  .crm-hamburger:hover { background: rgba(8, 19, 47, 0.13) !important; }
+
+  /* ── Main content area ───────────────────────────────────────────────────── */
+  .crm-main {
+    padding: 16px 14px 64px !important;
+    overflow-x: hidden;
+    box-sizing: border-box;
+    width: 100%;
+  }
+
+  /*
+   * Force ALL descendants to respect the container width.
+   *
+   * max-width: 100%    — element can't be wider than its parent.
+   * min-width: 0       — critical for flex/grid items: without it, a flex item
+   *                      refuses to shrink below its content size even though
+   *                      it technically should.
+   * box-sizing         — include padding/border in the 100% width calculation.
+   *
+   * grid-template-columns with !important overrides inline React styles on
+   * every grid container inside .crm-main. CSS !important beats inline styles.
+   *
+   * auto-fit + minmax(min(300px, 100%), 1fr) behaviour:
+   *   phone  (≈ 347px content area) → 1 column  (2×300 > 347 → only 1 fits)
+   *   tablet (≈ 700px content area) → 2 columns (2×300 < 700, 3×300 > 700)
+   *   large  (≈ 870px content area) → 2 columns (3×300+gaps > 870 → 2 cols)
+   *
+   * The min() ensures columns fill 100% when the container < 300px (tiny phones).
+   */
+  .crm-main * {
+    max-width: 100%;
+    min-width: 0;
+    box-sizing: border-box;
+    grid-template-columns: repeat(auto-fit, minmax(min(300px, 100%), 1fr)) !important;
+  }
+
+  /*
+   * Table internals must NOT have grid-template-columns applied.
+   * Restore max-width to natural so cell widths are not artificially capped.
+   * Tables themselves get min-width: 500px to keep columns readable,
+   * and their wrapper gets overflow-x: auto so users can swipe to scroll.
+   */
+  .crm-main table,
+  .crm-main thead,
+  .crm-main tbody,
+  .crm-main tfoot,
+  .crm-main tr,
+  .crm-main th,
+  .crm-main td,
+  .crm-main colgroup,
+  .crm-main col {
+    grid-template-columns: unset !important;
+    max-width: none;
+    min-width: unset;
+  }
+
+  /* Direct parent of a table becomes the scroll container */
+  .crm-main div:has(> table) {
+    overflow-x: auto !important;
+    -webkit-overflow-scrolling: touch;
+    width: 100%;
+  }
+  .crm-main table {
+    min-width: 500px;
+    font-size: 13px;
+  }
+
+  /*
+   * Recharts wrappers use position + pixel widths — they don't use CSS grid,
+   * so grid-template-columns is a no-op on them. The max-width: 100% from
+   * the universal rule above is enough to keep them from overflowing.
+   * Explicitly unset here for clarity.
+   */
+  .crm-main .recharts-wrapper,
+  .crm-main .recharts-surface,
+  .crm-main .recharts-legend-wrapper {
+    grid-template-columns: unset !important;
+    max-width: 100%;
+  }
+
+  /* ── SMTP / Email Settings forms ─────────────────────────────────────────
+     These grids are defined in MyProfileSection's <style> tag (not inline),
+     so they DON'T have an inline style for grid-template-columns.
+     The universal rule above will already convert them to auto-fit on tablet.
+     Here we force them to always be single-column (stacked) on ≤ 900px
+     because SMTP forms read better stacked — host + port side by side even
+     at 700px tablet width is crowded when labels are long.
+  ────────────────────────────────────────────────────────────────────────── */
+  .smtp-grid-host,
+  .smtp-grid-auth,
+  .smtp-grid-sender {
+    grid-template-columns: 1fr !important;
+  }
+  .smtp-test-row {
+    flex-wrap: wrap !important;
+  }
+  .smtp-test-row input {
+    flex: 1 1 100% !important;
+    max-width: 100% !important;
+  }
+
+  /* ── ClientsPage: table-container has overflow:hidden for border-radius.
+     Override only the x-axis so tables can scroll, y stays clipped. ─────── */
+  .table-container {
+    overflow-x: auto !important;
+    -webkit-overflow-scrolling: touch;
+  }
+  .data-table {
+    min-width: 580px;
+  }
+
+  /* Clients KPI grid: from 4-col to 2-col on tablet, 1-col on small phone */
+  .kpi-grid {
+    grid-template-columns: repeat(2, 1fr) !important;
+    gap: 12px !important;
+  }
+
+  /* Clients grid (card view) */
+  .clients-grid {
+    grid-template-columns: repeat(auto-fill, minmax(min(280px, 100%), 1fr)) !important;
+  }
+
+  /* ── Filter / action bars ────────────────────────────────────────────────── */
+  .crm-filter-bar {
+    flex-wrap: wrap !important;
+    gap: 8px !important;
+  }
+
+  /* ── Modals ──────────────────────────────────────────────────────────────── */
+  .crm-modal-box {
+    width: calc(100vw - 28px) !important;
+    max-height: 90vh !important;
+    overflow-y: auto !important;
+    margin: 0 !important;
+  }
+
+  /* Fixed-position elements (toasts, popovers) must not be width-constrained */
+  .crm-main [style*="position: fixed"],
+  .crm-main [style*="position:fixed"] {
+    max-width: none !important;
+  }
+}
+
+/* ─── Small mobile ≤ 500px: force everything to strict 1 column ─────────── */
+@media (max-width: 500px) {
+  .crm-main {
+    padding: 12px 10px 64px !important;
+  }
+  .crm-header {
+    padding: 0 10px !important;
+  }
+
+  /*
+   * At 500px the auto-fit rule already produces 1 column (500px - 20px
+   * padding = 480px, and 300px fits once but not twice). This explicit
+   * override is a safety net and also covers any edge cases where the
+   * container is slightly wider than 600px on a landscape small phone.
+   */
+  .crm-main * {
+    grid-template-columns: 1fr !important;
+  }
+  /* Always restore table internals */
+  .crm-main table,
+  .crm-main thead,
+  .crm-main tbody,
+  .crm-main tfoot,
+  .crm-main tr,
+  .crm-main th,
+  .crm-main td {
+    grid-template-columns: unset !important;
+    max-width: none;
+    min-width: unset;
+  }
+}
+
+/* ─── Client Dashboard (no sidebar) ─────────────────────────────────────── */
+@media (max-width: 900px) {
+  .client-dashboard-wrap {
+    padding: 16px 14px !important;
+    overflow-x: hidden;
+  }
+  .client-header-sticky {
+    padding: 0 16px !important;
+    margin-left: -14px !important;
+    margin-right: -14px !important;
+    margin-top: -16px !important;
+  }
+}
+
+/* ─── Login / public pages ───────────────────────────────────────────────── */
+@media (max-width: 560px) {
+  .login-card {
+    width: calc(100vw - 32px) !important;
+    padding: 28px 20px !important;
+  }
+}

@@ -1,0 +1,17 @@
+{
+  "name": "gmb-scrapper",
+  "version": "1.0.0",
+  "description": "Google Maps Business lead scraper — runs as a sidecar on port 4000",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "postinstall": "npx playwright install chromium"
+  },
+  "dependencies": {
+    "cors": "^2.8.5",
+    "csv-writer": "^1.6.0",
+    "exceljs": "^4.4.0",
+    "express": "^5.1.0",
+    "playwright": "^1.55.0"
+  }
+}

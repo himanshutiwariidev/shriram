@@ -1,0 +1,4 @@
+backend/.env
+frontend/.env
+backend/scrapper/node_modules
+backend/scrapper/output
