@@ -13,6 +13,17 @@ const setSocketIO = (io) => {
     socket.on("leave:chat", ({ tenantId, roomId }) => {
       socket.leave(`chat:${tenantId}:${roomId}`);
     });
+    // Support chat rooms
+    socket.on("join:support", (tenantId) => {
+      socket.join(`support:${tenantId}`);
+    });
+    socket.on("leave:support", (tenantId) => {
+      socket.leave(`support:${tenantId}`);
+    });
+    // Superadmin joins a single room to receive all tenant support events
+    socket.on("join:superadmin:support", () => {
+      socket.join("superadmin:support");
+    });
   });
 };
 

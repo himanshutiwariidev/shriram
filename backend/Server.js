@@ -59,6 +59,7 @@ const performanceRoutes          = require("./routes/performanceRoutes");
 const subscriptionPaymentRoutes  = require("./routes/subscriptionPaymentRoutes");
 const superAdminPaymentRoutes    = require("./routes/superAdminPaymentRoutes");
 const aiRoutes                   = require("./routes/aiRoutes");
+const supportChatRoutes          = require("./routes/supportChatRoutes");
 
 // ── Controllers used directly on Server-level routes ───────────────────────
 const { loginUser, logoutUser } = require("./controllers/userController");
@@ -254,6 +255,7 @@ app.use("/api/performance",    performanceRoutes);
 app.use("/api/subscription",   subscriptionPaymentRoutes);
 app.use("/api/superadmin/payments", superAdminPaymentRoutes);
 app.use("/api/ai",                 aiRoutes);
+app.use("/api/support-chat",       supportChatRoutes);
 
 // Tenant-facing: returns only the services enabled for this tenant
 app.get("/api/tenant/services", authMiddleware, getMyServices);

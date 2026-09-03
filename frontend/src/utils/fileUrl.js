@@ -7,8 +7,6 @@ export const resolveFileUrl = (uploadPath) => {
   if (/^(https?:)?\/\//i.test(uploadPath) || uploadPath.startsWith("data:") || uploadPath.startsWith("blob:")) {
     return uploadPath;
   }
-  const baseUrl = import.meta.env.VITE_API_BASE_URL
-    ? import.meta.env.VITE_API_BASE_URL.replace("/api", "")
-    : "https://crm.cybertricksmedia.in";
+  const baseUrl = (import.meta.env.VITE_API_BASE_URL || "https://crm.technicaltiwariji.com/api").replace("/api", "");
   return `${baseUrl.replace(/\/$/, "")}/${String(uploadPath).replace(/^\//, "")}`;
 };

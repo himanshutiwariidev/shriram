@@ -5,6 +5,7 @@ import useTenantTheme from "../hooks/useTenantTheme";
 import { TenantBrandingProvider } from "../context/TenantBrandingContext";
 import NotificationBell from "../components/NotificationBell";
 import ProfileDropdown from "../components/ProfileDropdown";
+import SupportChatBox from "../components/SupportChatBox";
 import DashboardSection from "./sections/DashboardSection";
 import TasksSection from "./sections/TasksSection";
 import ClientsSection from "./sections/ClientsSection";
@@ -136,6 +137,7 @@ function AdminDashboardInner() {
   const { user, role } = useAuth();
   const [showRenewal, setShowRenewal] = useState(false);
   const [sidebarOpen, setSidebarOpen] = useState(false);
+  const [supportOpen, setSupportOpen] = useState(false);
   const [openGroups, setOpenGroups] = useState(new Set());
   const [closedGroups, setClosedGroups] = useState(new Set());
   const toggleGroup = (key, currentlyOpen) => {
@@ -249,10 +251,10 @@ function AdminDashboardInner() {
             style={{
               display: "flex", alignItems: "center", gap: 10, width: "100%",
               padding: "10px 12px", borderRadius: 9, textAlign: "left",
-              color: hasActiveChild ? "#ffffff" : "rgba(255,255,255,0.88)",
-              background: hasActiveChild ? "rgba(255,255,255,0.07)" : "transparent",
-              fontWeight: hasActiveChild ? 600 : 500, fontSize: 13.5,
-              borderLeft: `3px solid ${hasActiveChild ? "#60a5fa" : "transparent"}`,
+              color: "rgba(255,255,255,0.88)",
+              background: "transparent",
+              fontWeight: 500, fontSize: 13.5,
+              borderLeft: "3px solid transparent",
               cursor: "pointer",
             }}
           >
@@ -417,7 +419,7 @@ function AdminDashboardInner() {
       case "meetings":
         return <MeetingsSection users={users} clients={clients} />;
       case "myProfile":
-        return <MyProfileSection subscription={subscription} featureCatalog={featureCatalog} />;
+        return <MyProfileSection subscription={subscription} featureCatalog={featureCatalog} setTab={setTab} onOpenSupport={() => setSupportOpen(true)} />;
       case "salesTargets":
         return <SalesTargetSection />;
       case "expenseDashboard":
@@ -520,9 +522,11 @@ function AdminDashboardInner() {
         )}
 
         <aside className={`crm-sidebar${sidebarOpen ? " sidebar-open" : ""}`} style={{ position: "fixed", left: 0, top: 0, bottom: 0, width: 238, background: "#08132f", borderRight: "none", display: "flex", flexDirection: "column", zIndex: 300, boxShadow: "4px 0 24px rgba(0,0,0,0.28)" }}>
-          <div style={{ padding: "24px 22px 22px", borderBottom: "1px solid rgba(255,255,255,0.09)" }}>
-            <TenantLogo logoUrl={branding.logoUrl} name={branding.name} primaryColor={branding.primaryColor} size={34} />
-            <div style={{ fontSize: 10, color: "rgba(255,255,255,0.6)", letterSpacing: ".1em", marginTop: 9, textTransform: "uppercase", fontWeight: 600 }}>{branding.name || "Control Center"}</div>
+          <div style={{ padding: "24px 22px 22px", borderBottom: "1px solid rgba(255,255,255,0.09)", display: "flex", alignItems: "center", gap: 12 }}>
+            <div style={{ background: "#fff", borderRadius: 10, padding: "5px 7px", display: "inline-flex", alignItems: "center", justifyContent: "center", flexShrink: 0 }}>
+              <TenantLogo logoUrl={branding.logoUrl} name={branding.name} primaryColor={branding.primaryColor} size={30} />
+            </div>
+            <div style={{ fontSize: 13.5, color: "#fff", fontWeight: 700, lineHeight: 1.3, letterSpacing: ".01em", overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>{branding.name || "Control Center"}</div>
           </div>
           <nav style={{ flex: 1, padding: "18px 12px", display: "flex", flexDirection: "column", gap: 2, overflowY: "auto", overflowX: "hidden" }}>
             {SIDEBAR_GROUPS.map((entry, i) => {
@@ -605,6 +609,7 @@ function AdminDashboardInner() {
                 subscription={subscription}
                 onNavigate={(tabId) => setTab(tabId)}
                 onLogout={handleLogout}
+                onHelp={() => setSupportOpen(true)}
               />
             </div>
           </header>
@@ -689,6 +694,13 @@ function AdminDashboardInner() {
 
       {/* AI Chat widget — only renders if AI is enabled for this tenant */}
       <AiChat />
+
+      {/* Support chat — opened from Help & Support in profile dropdown or MyProfile */}
+      <SupportChatBox
+        open={supportOpen}
+        onOpen={() => setSupportOpen(true)}
+        onClose={() => setSupportOpen(false)}
+      />
     </>
   );
 }

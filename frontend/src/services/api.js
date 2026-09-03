@@ -2,7 +2,7 @@ import axios from "axios";
 import { getAuth, clearAuth } from "./authStorage";
 
 const API = axios.create({
-  baseURL: import.meta.env.VITE_API_BASE_URL || "https://crm.cybertricksmedia.in/api",
+  baseURL: import.meta.env.VITE_API_BASE_URL || "https://crm.technicaltiwariji.com/api",
 });
 
 // Attach token automatically

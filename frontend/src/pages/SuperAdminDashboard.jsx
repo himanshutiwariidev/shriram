@@ -1,18 +1,20 @@
 import React from "react";
-import { Building2, CheckCircle2, AlertCircle, LogOut, Plus, ShieldCheck, X, Layers, IndianRupee } from "lucide-react";
+import { Building2, CheckCircle2, AlertCircle, LogOut, Plus, ShieldCheck, X, Layers, IndianRupee, MessageSquare } from "lucide-react";
 import logo from "../assets/logo.png";
 import OrganizationsSection from "./sections/OrganizationsSection";
 import CreateTenantSection from "./sections/CreateTenantSection";
 import ServiceCatalogSection from "./sections/ServiceCatalogSection";
 import SubscriptionPaymentsSection from "./sections/SubscriptionPaymentsSection";
+import SupportChatsSection from "./sections/SupportChatsSection";
 import useSuperAdminDashboard from "./sections/useSuperAdminDashboard";
 import { ConfirmModal, T } from "./sections/shared";
 
 const TABS = [
-  { id: "organizations", label: "Organizations",   Icon: Building2     },
-  { id: "createTenant",  label: "New Tenant",       Icon: Plus          },
-  { id: "serviceCatalog",label: "Service Catalog",  Icon: Layers        },
-  { id: "payments",      label: "Payments",          Icon: IndianRupee  },
+  { id: "organizations", label: "Organizations",   Icon: Building2      },
+  { id: "createTenant",  label: "New Tenant",       Icon: Plus           },
+  { id: "serviceCatalog",label: "Service Catalog",  Icon: Layers         },
+  { id: "payments",      label: "Payments",          Icon: IndianRupee   },
+  { id: "supportChats",  label: "Support Inbox",     Icon: MessageSquare },
 ];
 
 export default function SuperAdminDashboard() {
@@ -118,6 +120,8 @@ export default function SuperAdminDashboard() {
               <ServiceCatalogSection />
             ) : tab === "payments" ? (
               <SubscriptionPaymentsSection />
+            ) : tab === "supportChats" ? (
+              <SupportChatsSection />
             ) : (
               <OrganizationsSection
                 organizations={organizations}

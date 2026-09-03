@@ -26,7 +26,7 @@ const MenuItem = ({ icon: Icon, label, onClick, T, danger }) => (
 // lives inside the Profile page itself (MyProfileSection's Organization/
 // Subscription tabs), so this stays a lean identity + navigation menu
 // rather than duplicating org/plan stats that belong on the full page.
-export default function ProfileDropdown({ user, roleLabel, subscription, onNavigate, onLogout }) {
+export default function ProfileDropdown({ user, roleLabel, subscription, onNavigate, onLogout, onHelp }) {
   const { T } = useTenantTheme();
   const owner = subscription?.owner;
   const avatarUrl = user?.profileImage
@@ -59,7 +59,7 @@ export default function ProfileDropdown({ user, roleLabel, subscription, onNavig
       {({ close }) => (
         <div style={{ padding: "8px 0" }}>
           <MenuItem T={T} icon={User} label="Profile" onClick={() => { onNavigate("myProfile"); close(); }} />
-          <MenuItem T={T} icon={HelpCircle} label="Help" onClick={() => { window.location.href = "mailto:support@bharatbizmart.com"; close(); }} />
+          <MenuItem T={T} icon={HelpCircle} label="Help & Support" onClick={() => { onHelp?.(); close(); }} />
           <div style={{ borderTop: `1px solid ${T.borderLight}`, margin: "6px 0" }} />
           <MenuItem T={T} icon={LogOut} label="Logout" danger onClick={() => { close(); onLogout(); }} />
         </div>

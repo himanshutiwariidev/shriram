@@ -82,14 +82,14 @@ export default function NotificationBell() {
             )}
           </div>
 
-          <div style={{ display: "flex", gap: 6, padding: "18px 18px", overflowX: "auto", borderBottom: `1px solid ${T.borderLight}` }}>
+          <div style={{ display: "flex", gap: 5, padding: "10px 14px", flexWrap: "wrap", borderBottom: `1px solid ${T.borderLight}` }}>
             {FILTERS.map((f) => (
               <button
                 key={f.key}
                 onClick={() => setFilter(f.key)}
                 style={{
-                  flexShrink: 0, display: "inline-flex", alignItems: "center", justifyContent: "center",
-                  padding: "11px 14px", borderRadius: 20, fontSize: 11.5, fontWeight: 600, cursor: "pointer",
+                  display: "inline-flex", alignItems: "center", justifyContent: "center",
+                  padding: "5px 12px", borderRadius: 99, fontSize: 11, fontWeight: 600, cursor: "pointer",
                   border: `1.5px solid ${filter === f.key ? T.brand : T.inputBorder}`,
                   background: filter === f.key ? T.brandLight : "transparent",
                   color: filter === f.key ? T.brand : T.textSecondary,
