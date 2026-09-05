@@ -110,7 +110,8 @@ export default function MyProfileSection({ subscription, featureCatalog, setTab,
     if (!remaining || remaining <= 0) return 0;
     if (!org.createdAt || !expiryDate) return 50;
     const total = Math.ceil((new Date(expiryDate) - new Date(org.createdAt)) / 86400000);
-    return total > 0 ? Math.max(3, Math.min(100, Math.round((remaining / total) * 100))) : 50;
+    const elapsed = total - remaining;
+    return total > 0 ? Math.max(3, Math.min(100, Math.round((elapsed / total) * 100))) : 50;
   })();
 
   return (
