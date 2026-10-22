@@ -334,15 +334,15 @@ export function FieldIcon({ icon: Icon, small = false }) {
 
 export function Modal({ title, onClose, children, width = 560 }) {
   return (
-    <div style={{ position: "fixed", inset: 0, zIndex: 1000, display: "flex", alignItems: "center", justifyContent: "center", background: "rgba(15,23,42,0.45)", backdropFilter: "blur(4px)", animation: "fadeIn .18s ease" }}>
-      <div style={{ background: "#fff", borderRadius: 20, width: `min(${width}px, 95vw)`, boxShadow: "0 24px 80px rgba(0,0,0,.2)", border: `1px solid ${T.border}`, animation: "slideUp .22s cubic-bezier(.22,1,.36,1)" }}>
-        <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", padding: "22px 26px 18px", borderBottom: `1px solid ${T.borderLight}` }}>
+    <div style={{ position: "fixed", inset: 0, zIndex: 1000, display: "flex", alignItems: "center", justifyContent: "center", padding: "24px 12px", background: "rgba(15,23,42,0.45)", backdropFilter: "blur(4px)", animation: "fadeIn .18s ease" }}>
+      <div style={{ background: "#fff", borderRadius: 20, width: `min(${width}px, 95vw)`, maxHeight: "calc(100vh - 48px)", display: "flex", flexDirection: "column", overflow: "hidden", boxShadow: "0 24px 80px rgba(0,0,0,.2)", border: `1px solid ${T.border}`, animation: "slideUp .22s cubic-bezier(.22,1,.36,1)" }}>
+        <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", padding: "22px 26px 18px", borderBottom: `1px solid ${T.borderLight}`, flexShrink: 0 }}>
           <h3 style={{ fontFamily: "'Syne', sans-serif", fontWeight: 700, fontSize: 16, color: T.textPrimary }}>{title}</h3>
           <button onClick={onClose} style={{ background: "none", border: "none", cursor: "pointer", color: T.textMuted, display: "flex", padding: 4, borderRadius: 6, transition: "background .15s" }} onMouseEnter={e => e.currentTarget.style.background = T.slateBg} onMouseLeave={e => e.currentTarget.style.background = "none"}>
             <X size={18} strokeWidth={2} />
           </button>
         </div>
-        <div style={{ padding: "22px 26px 26px" }}>{children}</div>
+        <div style={{ padding: "22px 26px 26px", overflowY: "auto", flex: 1, minHeight: 0 }}>{children}</div>
       </div>
     </div>
   );

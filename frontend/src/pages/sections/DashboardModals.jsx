@@ -128,7 +128,7 @@ function EditUserModal({ editUser, setEditUser, editUserForm, setEditUserForm, s
           )}
         </div>
 
-        <div style={{ display: "flex", gap: 10, justifyContent: "flex-end", marginTop: 18 }}>
+        <div style={{ display: "flex", gap: 10, justifyContent: "flex-end", marginTop: 18, position: "sticky", bottom: -26, background: "#fff", padding: "14px 0 26px", marginBottom: -26, borderTop: `1px solid ${T.borderLight || T.border}` }}>
           <button type="button" onClick={() => setEditUser(null)} style={{ padding: "9px 18px", borderRadius: 9, border: `1.5px solid ${T.border}`, background: "#fff", color: T.textSecondary, fontSize: 13, fontWeight: 600, cursor: "pointer", fontFamily: "inherit" }}>Cancel</button>
           <button className="pri-btn" type="submit" style={{ display: "flex", alignItems: "center", gap: 7, padding: "9px 20px", background: `linear-gradient(135deg, ${T.brand}, ${T.brandDark})`, color: "#fff", borderRadius: 9, fontSize: 13, fontWeight: 700, fontFamily: "'Syne', sans-serif", border: "none", cursor: "pointer" }}>
             <Save size={14} strokeWidth={2} /> Save Changes
